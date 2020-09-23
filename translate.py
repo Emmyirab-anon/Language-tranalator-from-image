@@ -33,6 +33,7 @@ list of languages: {'af': 'afrikaans', 'sq': 'albanian', 'am': 'amharic', 'ar': 
 import cv2
 import pytesseract
 from googletrans import Translator
+import os
 
 #determine what language you want to translate to
 langTo = input("What would you like to translate to? (refer to the list): ")
@@ -47,12 +48,15 @@ img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 #convert image to data
 boxes = pytesseract.image_to_data(img)
 
-
+p = ""
 for x,b in enumerate(boxes.splitlines()):
     if x!= 0:
         b = b.split()
         if len(b)==12:
-            text = Translator().translate(b[11], dest = langTo)
-            print(text.text, file = open('output.txt', 'a'))
-cv2.imshow('result', img)
-cv2.waitkey(0)
+            p += b[11]
+        
+text = Translator().translate(p, dest = langTo)
+print(text.text, file = open('result.txt', 'a'))
+os.startfile('result.txt')
+           
+cv2.imshow('From', img)
